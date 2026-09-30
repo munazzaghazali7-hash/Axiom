@@ -1,7 +1,6 @@
 # Axiom — Provable Autonomous Data Intelligence Platform
 
 > **Code Cubicle 6.0 · Problem Statement 01 · Geek Room**
-> Online round: Oct 3 · Offline round: Oct 11
 
 ## What it is
 
