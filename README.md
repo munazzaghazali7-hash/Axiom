@@ -176,12 +176,3 @@ docs/
   DEMO.md          # Judge demo script
 ```
 
----
-
-## Decision log
-
-| Date | Decision |
-|---|---|
-| Sept 24 | **Tavily** (search) + **Gemini 1.5 Pro** (AI) — locked |
-| Oct 4 | Real Nitro Enclave vs stub attestation — final call |
-| Oct 8 | Feature freeze |
