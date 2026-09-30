@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "dataintel-schemas"
+version = "0.1.0"
+description = "Shared Pydantic v2 models — WorkflowPlan, ResultRecord, Attestation"
+authors = ["Team"]
+packages = [{ include = "schemas", from = ".." }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.7.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

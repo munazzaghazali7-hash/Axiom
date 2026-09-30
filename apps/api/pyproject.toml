@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "dataintel-api"
+version = "0.1.0"
+description = "AI-Powered Data Intelligence Platform — FastAPI backend"
+authors = ["Team"]
+packages = [{ include = "app" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.111.0"
+uvicorn = { extras = ["standard"], version = "^0.29.0" }
+sqlalchemy = { extras = ["asyncio"], version = "^2.0.30" }
+asyncpg = "^0.29.0"
+alembic = "^1.13.1"
+pydantic = "^2.7.1"
+pydantic-settings = "^2.2.1"
+celery = { extras = ["redis"], version = "^5.4.0" }
+redis = "^5.0.4"
+python-dotenv = "^1.0.1"
+httpx = "^0.27.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+pytest-asyncio = "^0.23.6"
+httpx = "^0.27.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

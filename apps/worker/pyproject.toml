@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "dataintel-worker"
+version = "0.1.0"
+description = "AI-Powered Data Intelligence Platform — Celery workers"
+authors = ["Team"]
+packages = [{ include = "worker" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+celery = { extras = ["redis"], version = "^5.4.0" }
+redis = "^5.0.4"
+google-genai = "^0.3.0"
+httpx = "^0.27.0"
+pydantic = "^2.7.1"
+pydantic-settings = "^2.2.1"
+sqlalchemy = { extras = ["asyncio"], version = "^2.0.30" }
+asyncpg = "^0.29.0"
+rapidfuzz = "^3.9.3"
+python-dotenv = "^1.0.1"
+tavily-python = "^0.3.3"
+# playwright is installed separately: `playwright install chromium`
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
