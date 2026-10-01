@@ -1,0 +1,84 @@
+databases:
+  - name: axiom-postgres
+    databaseName: dataintel
+    user: dataintel
+    plan: free
+    region: oregon # or ohio, frankfurt, singapore
+
+services:
+  # ── 1. Redis Key-Value Instance ──────────────────────────────────────────────
+  - type: keyvalue
+    name: axiom-redis
+    plan: free
+    ipAllowList: [] # internal access only
+    region: oregon
+
+  # ── 2. FastAPI Backend API ──────────────────────────────────────────────────
+  - type: web
+    name: axiom-api
+    runtime: python
+    rootDir: apps/api
+    plan: free
+    region: oregon
+    buildCommand: pip install --upgrade pip && pip install poetry && poetry config virtualenvs.create false && poetry install --no-root
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: axiom-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: axiom-redis
+          property: connectionString
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: PYTHONPATH
+        value: ".:../../packages:../.."
+
+  # ── 3. Celery Execution Worker ──────────────────────────────────────────────
+  - type: worker
+    name: axiom-worker
+    runtime: python
+    rootDir: apps/worker
+    plan: starter
+    region: oregon
+    buildCommand: pip install --upgrade pip && pip install poetry && poetry config virtualenvs.create false && poetry install --no-root
+    startCommand: celery -A worker.celery_app worker --loglevel=info --pool=threads --concurrency=4 -Q celery,planning,execution,processing
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: axiom-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: axiom-redis
+          property: connectionString
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: PYTHONPATH
+        value: ".:../../packages:../.."
+
+  # ── 4. Next.js Web Frontend ─────────────────────────────────────────────────
+  - type: web
+    name: axiom-web
+    runtime: node
+    rootDir: apps/web
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: axiom-api
+          property: host

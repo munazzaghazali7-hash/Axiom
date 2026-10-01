@@ -3,7 +3,9 @@
  * All API calls go through here. Base URL from NEXT_PUBLIC_API_URL env var.
  */
 
-const BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+const BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined" ? "/api/proxy" : "http://127.0.0.1:8001");
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const url = `${BASE}${path}`;
